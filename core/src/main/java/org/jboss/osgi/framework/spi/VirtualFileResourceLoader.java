@@ -1,4 +1,5 @@
 package org.jboss.osgi.framework.spi;
+
 /*
  * #%L
  * JBossOSGi Framework
@@ -30,13 +31,16 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSigner;
 import java.security.CodeSource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 
 import org.jboss.modules.ClassSpec;
 import org.jboss.modules.PackageSpec;
@@ -140,6 +144,32 @@ public final class VirtualFileResourceLoader implements ResourceLoader {
         return localPaths;
     }
 
+    @Override
+    public Collection<String> listResources(String path, String filePattern) {
+        List<String> result = new ArrayList<String>();
+        Enumeration<String> entryPaths;
+        try {
+            entryPaths = virtualFile.getEntryPaths(path);
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+        Pattern pattern = convertToPattern(filePattern);
+        while (entryPaths.hasMoreElements()) {
+            String resname = entryPaths.nextElement();
+            String filename = resname.substring(path.length() + 1);
+            if (pattern.matcher(filename).matches()) {
+                result.add(filename);
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    // Convert file pattern (RFC 1960-based Filter) into a RegEx pattern
+    private static Pattern convertToPattern(String filePattern) {
+        filePattern = filePattern.replace("*", ".*");
+        return Pattern.compile("^" + filePattern + "$");
+    }
+
     private Set<String> getLocalPaths() {
         Set<String> result = new HashSet<String>();
         try {
@@ -156,10 +186,10 @@ public final class VirtualFileResourceLoader implements ResourceLoader {
                 }
             }
         } catch (IOException ex) {
-            throw MESSAGES.illegalArgumentCannotObtainPaths(ex,  virtualFile);
+            throw MESSAGES.illegalArgumentCannotObtainPaths(ex, virtualFile);
         }
         if (result.size() == 0)
-            throw MESSAGES.illegalArgumentCannotObtainPaths(null,  virtualFile);
+            throw MESSAGES.illegalArgumentCannotObtainPaths(null, virtualFile);
 
         return Collections.unmodifiableSet(result);
     }
@@ -208,4 +238,3 @@ public final class VirtualFileResourceLoader implements ResourceLoader {
         }
     }
 }
-

@@ -439,7 +439,12 @@ public class ModulesTestCase extends ModulesTestBase {
 
         @Override
         public List<Resource> loadResourceLocal(String name) {
-            return null;
+            return Collections.emptyList();
+        }
+
+        @Override
+        public List<Resource> listResourceLocal(String rootPath, String filePattern, boolean recurse) {
+            return Collections.emptyList();
         }
     }
 

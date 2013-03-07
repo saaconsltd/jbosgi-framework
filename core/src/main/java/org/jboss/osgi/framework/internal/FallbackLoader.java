@@ -191,6 +191,11 @@ final class FallbackLoader implements LocalLoader {
         }
     }
 
+    @Override
+    public List<Resource> listResourceLocal(String rootPath, String filePattern, boolean recurse) {
+        return Collections.emptyList();
+    }
+
     private void findRevisionDynamically(DynamicLoadContext context, List<XPackageRequirement> matchingPatterns) {
         String pathName = context.resName;
         int idx = pathName.lastIndexOf('/');

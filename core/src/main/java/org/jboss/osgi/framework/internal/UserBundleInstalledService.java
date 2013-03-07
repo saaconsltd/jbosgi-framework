@@ -68,7 +68,7 @@ abstract class UserBundleInstalledService<B extends UserBundleState<R>, R extend
 
     ServiceName install(ServiceTarget serviceTarget, ServiceListener<XBundle> listener) {
         ServiceName serviceName = getBundleManager().getServiceName(initialDeployment, Bundle.INSTALLED);
-        LOGGER.debugf("Installing %s %s", getClass().getSimpleName(), serviceName);
+        LOGGER.tracef("Installing %s %s", getClass().getSimpleName(), serviceName);
         ServiceBuilder<B> builder = serviceTarget.addService(serviceName, this);
         addServiceDependencies(builder);
         if (listener != null) {

@@ -107,4 +107,9 @@ final class NativeResourceLoader implements ResourceLoader {
     public Collection<String> getPaths() {
         return Collections.emptyList();
     }
+
+    @Override
+    public Collection<String> listResources(String path, String pattern) {
+        return Collections.emptyList();
+    }
 }

@@ -99,6 +99,11 @@ public class FrameworkModuleProviderImpl implements FrameworkModuleProvider {
             public List<Resource> loadResourceLocal(String name) {
                 return Collections.emptyList();
             }
+
+            @Override
+            public List<Resource> listResourceLocal(String rootPath, String filePattern, boolean recurse) {
+                return Collections.emptyList();
+            }
         };
         Set<String> paths = systemPaths.getSystemPaths();
         PathFilter filter = systemPaths.getSystemFilter();

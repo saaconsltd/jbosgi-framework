@@ -152,6 +152,7 @@ abstract class UserBundleRevision extends BundleStateRevision {
         }
 
         // Add the Bundle-ClassPath to the root virtual files
+        int nextNonRootIndex = 1;
         for (String path : metadata.getBundleClassPath()) {
             if (path.equals(".")) {
                 bundleClassPath.add(rootContent);
@@ -160,7 +161,7 @@ abstract class UserBundleRevision extends BundleStateRevision {
                     VirtualFile child = rootFile.getChild(path);
                     if (child != null) {
                         VirtualFile anotherRoot = AbstractVFS.toVirtualFile(child.toURL());
-                        RevisionContent revContent = new RevisionContent(this, metadata, bundleId, bundleClassPath.size(), anotherRoot);
+                        RevisionContent revContent = new RevisionContent(this, metadata, bundleId, nextNonRootIndex++, anotherRoot);
                         bundleClassPath.add(revContent);
                     }
                 } catch (IOException ex) {
